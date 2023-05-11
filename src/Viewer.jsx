@@ -1,5 +1,5 @@
 import React,{ useState,useEffect,useRef} from 'react'
-import { Stage, Layer, Text, Rect, Group } from 'react-konva';
+import { Stage, Layer, Text, Rect, Group,Arrow } from 'react-konva';
 import { set } from './idb_utils';
 
 function Viewer({data,size}) {
@@ -17,13 +17,12 @@ function Viewer({data,size}) {
         set(...tempitem)
         setwallData(tempwall)
       }
-      let tempwall=wallData.map(item=>item.id===id?{...item,isDragging:false}:item)
-      setwallData(tempwall)
      }
+     
      useEffect(() => {
       setwallData(data)
      }, [data])
-
+     
      const scaleBy = 1.2;
      const  zoomStage=(event)=> {
       if (stageRef.current !== null) {
@@ -44,21 +43,32 @@ function Viewer({data,size}) {
         stage.batchDraw();
       }
     }
+    const getPoints=(id,linkid)=>{
+      let from=[];
+      let to=[];
+      if(typeof linkid === 'string'){
+         linkid=parseInt(linkid)
+         from=wallData.find(item=>item.id===id);
+         to= wallData.find(item=>item.id===linkid)
+         return [from.x+75,from.y+150,to.x+75,to.y]
+      }
+     return[0,0,0,0]     
+    }
+ 
   return (
     <>
-    <Stage ref={stageRef} onWheel={zoomStage} width={size.width} height={size.height} draggable >
+    <Stage  ref={stageRef} onWheel={zoomStage} width={size.width} height={size.height} draggable >
     <Layer>
-      { console.log(wallData)}
      {wallData.map(item=>
-     <Group 
+     <Group key={item.id}
      onDragStart={()=>handleDrag(item.id)}
      onDragEnd={(e)=>updatePos(e,item.id)}
      fill={item.isDragging ? 'green' : 'black'}
      x={item.x}
-      y={item.y}
-      draggable
+     y={item.y}
+     draggable
      >
-     <Rect width={150} height={150} fill='gray' stroke></Rect>
+     <Rect width={150} height={150} fill='gray' stroke="black"></Rect>
      <Text
       align='center'
       verticalAlign='middle'
@@ -68,8 +78,9 @@ function Viewer({data,size}) {
       text={item.name}  
     />
      </Group>)}
-      
+     {wallData.map(item=><Arrow key={item.id}  points={getPoints(item.id,item.link)} fill='black' stroke={'black'}/>)}
     </Layer>
+   
   </Stage>
   </>
   )

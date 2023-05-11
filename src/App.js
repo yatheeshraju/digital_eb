@@ -5,14 +5,20 @@ import Viewer from './Viewer';
 
 
 function App() {
-  const [addCard, setaddCard] = useState("")
+  const [cardDetails, setcardDetails] = useState({})
   const [testwall, settestwall] = useState([]);
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
   const handleAddCard=async ()=>{
-    if(addCard!==""||addCard!==undefined||addCard!==null){
-      set({"name":addCard,x:random(20,500),y:random(20,500),isDragging:false});
+    if(cardDetails.name!==""||cardDetails.name!==undefined||cardDetails.name!==null){
+      set({"name":cardDetails.name,link:cardDetails.link,x:random(20,500),y:random(20,500),isDragging:false});
     }
     reloadData()
+  }
+
+  const handleInput =(e)=>{
+    let value =e.target.value;
+    let keyname = e.target.name;
+    setcardDetails({...cardDetails,[keyname]:value})
   }
 
   const reloadData= async()=>{
@@ -27,12 +33,20 @@ function App() {
   return (
     <div className="app">
       <div className='editor'>
-      <input type='text' onChange={(e)=>setaddCard(e.target.value)} />
+      <input type='text' name='name' onChange={handleInput} />
+       <br/> 
+       Link to :
+      <select onChange={handleInput} name='link'>
+        <option> please select a card to link </option>
+       {testwall.map((item)=><option key={item.id} value={item.id}>{item.name}</option>)}
+      </select>
+      <br/>
       <button onClick={handleAddCard}>Add Card</button>
+      <hr/>
       {testwall.map((item)=><li key={item.id}>{item.name}</li>)}
       </div>
       <div className='viewer'>
-      <Viewer  size={{width:1000,height:900}}data={testwall}/>
+      <Viewer  size={{width:(window.innerWidth/3)*2,height:window.innerHeight}}data={testwall}/>
       </div>
      
     </div>
