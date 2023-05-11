@@ -8,9 +8,9 @@ function App() {
   const [testwall, settestwall] = useState([]);
   return (
     <div className="app">
-      <div className="editor ">
+      <div className="editor">
         <Toaster />
-        <div className="w-full flex flex-col p-4 h-1/2">
+        <div className="w-full flex flex-col p-4 min-h-screen">
           <a
             href="/"
             className="mb-2 w-full text-center text-xl font-bold text-black"

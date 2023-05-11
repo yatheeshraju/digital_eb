@@ -4,7 +4,7 @@ import { set } from "./idb_utils";
 
 function Viewer({ data, size }) {
   const [wallData, setwallData] = useState([]);
-  const [scaleBy, setscaleBy] = useState(1.2);
+  const [scaleBy, setscaleBy] = useState(0);
   const stageRef = useRef();
   const handleDrag = (id) => {
     let tempwall = wallData.map((item) =>
@@ -25,6 +25,7 @@ function Viewer({ data, size }) {
 
   useEffect(() => {
     setwallData(data);
+    setscaleBy(1.2);
   }, [data]);
 
   const zoomStage = (event) => {

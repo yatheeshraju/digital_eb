@@ -69,7 +69,10 @@ function Editor({ settestwall, testwall }) {
   };
   return (
     <>
-      <label className="font-normal text-gray-700 dark:text-white" for="name">
+      <label
+        className="font-normal text-gray-700 dark:text-white"
+        htmlFor="name"
+      >
         Name
       </label>
       <input
@@ -80,7 +83,10 @@ function Editor({ settestwall, testwall }) {
         onChange={handleInput}
       />
 
-      <label className="font-normal text-gray-700 dark:text-white" for="data">
+      <label
+        className="font-normal text-gray-700 dark:text-white"
+        htmlFor="data"
+      >
         Data
       </label>
       <textarea
@@ -88,10 +94,13 @@ function Editor({ settestwall, testwall }) {
         type="text"
         name="data"
         id="data"
-        rows={15}
+        rows={5}
         onChange={handleInput}
       />
-      <label className="font-normal text-gray-700 dark:text-white" for="link">
+      <label
+        className="font-normal text-gray-700 dark:text-white"
+        htmlFor="link"
+      >
         Link Card
       </label>
       <select
@@ -100,7 +109,7 @@ function Editor({ settestwall, testwall }) {
         id="link"
         name="link"
       >
-        <option disabled value={null}>
+        <option disabled selected>
           please select a card to link
         </option>
         {testwall.map((item) => (
@@ -117,7 +126,7 @@ function Editor({ settestwall, testwall }) {
       >
         Add Card
       </button>
-      <div className="w-full flex flex-col overflow-auto">
+      <div className="w-full flex flex-col h-96 overflow-auto">
         {testwall.map((item) => (
           <Card key={item.id} info={item} handleDeleteCard={handleDeleteCard} />
         ))}
