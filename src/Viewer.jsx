@@ -4,6 +4,7 @@ import { set } from "./idb_utils";
 
 function Viewer({ data, size }) {
   const [wallData, setwallData] = useState([]);
+  const [scaleBy, setscaleBy] = useState(1.2);
   const stageRef = useRef();
   const handleDrag = (id) => {
     let tempwall = wallData.map((item) =>
@@ -12,28 +13,20 @@ function Viewer({ data, size }) {
     setwallData(tempwall);
   };
   const updatePos = (e, id) => {
-    if (
-      e.target.x() < size.width &&
-      e.target.x() > 0 &&
-      e.target.y() < size.height &&
-      e.target.y() > 0
-    ) {
-      let tempwall = wallData.map((item) =>
-        item.id === id
-          ? { ...item, isDragging: false, x: e.target.x(), y: e.target.y() }
-          : item
-      );
-      let tempitem = tempwall.filter((item) => item.id === id);
-      set(...tempitem);
-      setwallData(tempwall);
-    }
+    let tempwall = wallData.map((item) =>
+      item.id === id
+        ? { ...item, isDragging: false, x: e.target.x(), y: e.target.y() }
+        : item
+    );
+    let tempitem = tempwall.filter((item) => item.id === id);
+    set(...tempitem);
+    setwallData(tempwall);
   };
 
   useEffect(() => {
     setwallData(data);
   }, [data]);
 
-  const scaleBy = 1.2;
   const zoomStage = (event) => {
     if (stageRef.current !== null) {
       const stage = stageRef.current;
@@ -73,8 +66,9 @@ function Viewer({ data, size }) {
         style={{ backgroundColor: "#dad7cd" }}
         ref={stageRef}
         onWheel={zoomStage}
-        width={size.width}
-        height={size.height}
+        width={size.width * scaleBy}
+        height={size.height * scaleBy}
+        draggable
       >
         <Layer>
           {wallData.map((item) => (

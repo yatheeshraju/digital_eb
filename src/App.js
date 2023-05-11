@@ -8,12 +8,12 @@ function App() {
   const [testwall, settestwall] = useState([]);
   return (
     <div className="app">
-      <div className="editor p-4 ">
+      <div className="editor ">
         <Toaster />
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col p-4 h-1/2">
           <a
             href="/"
-            className="mb-2 w-full py-2 px-4 text-xl font-bold text-black"
+            className="mb-2 w-full text-center text-xl font-bold text-black"
           >
             Digital Evidence Board
           </a>
@@ -23,7 +23,7 @@ function App() {
       <div className="viewer">
         <Viewer
           size={{
-            width: (window.innerWidth / 3) * 2,
+            width: (window.innerWidth / 4) * 3,
             height: window.innerHeight,
           }}
           data={testwall}
