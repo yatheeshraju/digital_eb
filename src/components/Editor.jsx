@@ -4,19 +4,15 @@ import { set, getAll, del } from "../utils/idb_utils";
 import Card from "./Card";
 import { toast } from "react-hot-toast";
 import EditCard from "./EditCard";
-import {
-  AiFillCheckCircle,
-  AiFillPlusCircle,
-  AiOutlinePlus,
-} from "react-icons/ai";
+import { AiFillCheckCircle, AiFillPlusCircle } from "react-icons/ai";
 import CreateCard from "./CreateCard";
 
 function Editor({ settestwall, testwall }) {
-  const [cardDetails, setcardDetails] = useState({});
   const [showEdit, setShowEdit] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [editId, setEditId] = useState();
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
   const handleAddCard = async (cardDetails) => {
     if (
       cardDetails.name !== "" ||
@@ -27,6 +23,7 @@ function Editor({ settestwall, testwall }) {
         name: cardDetails.name,
         link: cardDetails.link,
         data: cardDetails.data,
+        image: cardDetails.image,
         x: random(20, 500),
         y: random(20, 500),
         isDragging: false,
@@ -47,6 +44,7 @@ function Editor({ settestwall, testwall }) {
         name: newCardDetails.name,
         link: newCardDetails.link,
         data: newCardDetails.data,
+        image: newCardDetails.image,
         x: newCardDetails.x,
         y: newCardDetails.y,
         isDragging: false,

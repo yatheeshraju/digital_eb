@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Stage, Layer, Text, Rect, Group, Arrow } from "react-konva";
+
 import { set } from "../utils/idb_utils";
+import { CardImage } from "./CardImage";
 
 function Viewer({ data, size }) {
   const [wallData, setwallData] = useState([]);
@@ -49,6 +51,7 @@ function Viewer({ data, size }) {
       stage.width(size.width);
     }
   };
+
   const getPoints = (id, linkid) => {
     let from = [];
     let to = [];
@@ -59,11 +62,34 @@ function Viewer({ data, size }) {
       if (from && to) {
         return {
           valid: true,
-          points: [from.x + 75, from.y + 150, to.x + 75, to.y],
+          points: [from.x + 125, from.y + 300, to.x + 125, to.y],
         };
       }
     }
     return { valid: false, points: [0, 0, 0, 0] };
+  };
+
+  const b64toBlob = (b64Data, contentType = "") => {
+    let sliceSize = 512;
+    const byteCharacters = window.atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+
+    const blobUrl = URL.createObjectURL(blob);
+    return blobUrl;
   };
 
   return (
@@ -76,7 +102,7 @@ function Viewer({ data, size }) {
         height={size.height * scaleBy}
         draggable
       >
-        <Layer>
+        <Layer imageSmoothingEnabled={false}>
           {wallData.map((item) => (
             <Group
               key={item.id}
@@ -88,33 +114,52 @@ function Viewer({ data, size }) {
               draggable
             >
               <Rect
-                width={150}
-                height={150}
+                width={300}
+                height={300}
                 fill="white"
-                strokeWidth={0.4}
                 shadowEnabled={true}
                 shadowOffsetY={5}
                 shadowOffsetX={5}
                 shadowBlur={20}
                 shadowColor="#344e41"
               ></Rect>
-              <Text
-                align="center"
-                verticalAlign="middle"
-                width={150}
-                height={50}
-                key={"name_" + item.id}
-                text={item.name}
+              <CardImage
+                imgurl={b64toBlob(
+                  item.image.split(",")[1],
+                  item.image.split(",")[0].split(":")[1].split(";")[0]
+                )}
               />
 
-              <Text
-                align="center"
-                verticalAlign="middle"
-                width={150}
-                height={100}
-                key={"desc_" + item.id}
-                text={item.data}
-              />
+              <Group>
+                <Rect
+                  width={300}
+                  height={100}
+                  fill="white"
+                  offsetY={-200}
+                ></Rect>
+                <Text
+                  align="center"
+                  verticalAlign="middle"
+                  width={300}
+                  fontStyle="bold"
+                  fontSize={18}
+                  height={50}
+                  key={"name_" + item.id}
+                  text={item.name}
+                  offsetY={-190}
+                />
+
+                <Text
+                  align="left"
+                  verticalAlign="top"
+                  padding={10}
+                  width={300}
+                  height={100}
+                  offsetY={-215}
+                  key={"desc_" + item.id}
+                  text={item.data}
+                />
+              </Group>
             </Group>
           ))}
           {wallData.map((item) =>

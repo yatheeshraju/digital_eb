@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  AiOutlineAccountBook,
-  AiOutlineClose,
-  AiOutlineEdit,
-} from "react-icons/ai";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import { AiOutlineAccountBook, AiOutlineClose } from "react-icons/ai";
 
 export default function CreateCard({
   handleAddCard,
@@ -15,6 +12,19 @@ export default function CreateCard({
     let value = e.target.value;
     let keyname = e.target.name;
     setcardDetails({ ...cardDetails, [keyname]: value });
+  };
+
+  const handleFile = (e) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = function () {
+      let value = reader.result;
+      let keyname = e.target.name;
+      setcardDetails({ ...cardDetails, [keyname]: value });
+    };
+    reader.onerror = function (error) {
+      toast.error(error);
+    };
   };
 
   return (
@@ -65,6 +75,22 @@ export default function CreateCard({
                 rows={5}
                 onChange={handleInput}
               />
+
+              <label
+                className="font-normal text-gray-700 dark:text-white"
+                htmlFor="image"
+              >
+                Image
+              </label>
+              <input
+                className="mb-2 appearance-none border border-black-300 w-full py-2 px-4 bg-white text-black-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-transparent"
+                type="file"
+                name="image"
+                id="image"
+                accept="image/png,image/jpeg"
+                onChange={handleFile}
+              />
+
               <label
                 className="font-normal text-gray-700 dark:text-white"
                 htmlFor="link"
