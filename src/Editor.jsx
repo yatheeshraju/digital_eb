@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { set, getAll, del, get } from "./idb_utils";
+import { set, getAll, del } from "./idb_utils";
 import Card from "./Card";
 import { toast } from "react-hot-toast";
-import { AiOutlineNodeIndex, AiOutlineSisternode } from "react-icons/ai";
+import Modal from "./Modal";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 function Editor({ settestwall, testwall }) {
   const [cardDetails, setcardDetails] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [editId, setEditId] = useState();
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
   const handleAddCard = async () => {
     if (
@@ -25,6 +28,27 @@ function Editor({ settestwall, testwall }) {
     }
     reloadData();
   };
+
+  const handleSave = async (newCardDetails) => {
+    if (
+      newCardDetails.name !== "" ||
+      newCardDetails.name !== undefined ||
+      newCardDetails.name !== null
+    ) {
+      set({
+        id: newCardDetails.id,
+        name: newCardDetails.name,
+        link: newCardDetails.link,
+        data: newCardDetails.data,
+        x: newCardDetails.x,
+        y: newCardDetails.y,
+        isDragging: false,
+      });
+    }
+    handleEditClose();
+    reloadData();
+  };
+
   const reloadData = async () => {
     await getAll().then((res) => settestwall(res));
   };
@@ -36,39 +60,36 @@ function Editor({ settestwall, testwall }) {
   useEffect(() => {
     getAll().then((res) => settestwall(res));
   }, [settestwall]);
-  const handleDeleteCard = async (id) => {
+  const handleDelete = async (id) => {
     const tempid = id !== undefined ? parseInt(id) : undefined;
 
     if (tempid !== undefined) {
-      const link = await get(id);
-      if (link.link === undefined) {
-        toast("looks like root node !", {
-          icon: <AiOutlineNodeIndex color="red" />,
-        });
-        return;
-      }
-      if (!parseInt(link.link)) {
-        // const linkedCard = await get(parseInt(link.link));
-        // await set({
-        //   id: linkedCard.id,
-        //   name: linkedCard.name,
-        //   link: undefined,
-        //   data: linkedCard.data,
-        //   x: random(20, 500),
-        //   y: random(20, 500),
-        //   isDragging: false,
-        // });
-        await del(id);
-        reloadData();
-      } else {
-        toast("links at below level !", {
-          icon: <AiOutlineSisternode color="red" />,
-        });
-      }
+      await del(id);
+      reloadData();
+      toast("card deleted !", {
+        icon: <AiFillCheckCircle color="green" />,
+      });
     }
+  };
+
+  const handleEditOpen = (id) => {
+    setShowModal(true);
+    setEditId(id);
+  };
+
+  const handleEditClose = (id) => {
+    setShowModal(false);
   };
   return (
     <>
+      {showModal ? (
+        <Modal
+          testwall={testwall}
+          id={editId}
+          handleEditClose={handleEditClose}
+          handleSave={handleSave}
+        />
+      ) : null}
       <label
         className="font-normal text-gray-700 dark:text-white"
         htmlFor="name"
@@ -109,9 +130,7 @@ function Editor({ settestwall, testwall }) {
         id="link"
         name="link"
       >
-        <option disabled selected>
-          please select a card to link
-        </option>
+        <option disabled>please select a card to link</option>
         {testwall.map((item) => (
           <option key={item.id} value={item.id}>
             {item.name}
@@ -128,7 +147,12 @@ function Editor({ settestwall, testwall }) {
       </button>
       <div className="w-full flex flex-col h-96 overflow-auto">
         {testwall.map((item) => (
-          <Card key={item.id} info={item} handleDeleteCard={handleDeleteCard} />
+          <Card
+            key={item.id}
+            info={item}
+            handleDelete={handleDelete}
+            handleEditOpen={handleEditOpen}
+          />
         ))}
       </div>
     </>

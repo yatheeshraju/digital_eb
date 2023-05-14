@@ -56,9 +56,14 @@ function Viewer({ data, size }) {
       linkid = parseInt(linkid);
       from = wallData.find((item) => item.id === id);
       to = wallData.find((item) => item.id === linkid);
-      return [from.x + 75, from.y + 150, to.x + 75, to.y];
+      if (from && to) {
+        return {
+          valid: true,
+          points: [from.x + 75, from.y + 150, to.x + 75, to.y],
+        };
+      }
     }
-    return [0, 0, 0, 0];
+    return { valid: false, points: [0, 0, 0, 0] };
   };
 
   return (
@@ -86,7 +91,6 @@ function Viewer({ data, size }) {
                 width={150}
                 height={150}
                 fill="white"
-                stroke="#344e41"
                 strokeWidth={0.4}
                 shadowEnabled={true}
                 shadowOffsetY={5}
@@ -102,6 +106,7 @@ function Viewer({ data, size }) {
                 key={"name_" + item.id}
                 text={item.name}
               />
+
               <Text
                 align="center"
                 verticalAlign="middle"
@@ -113,10 +118,10 @@ function Viewer({ data, size }) {
             </Group>
           ))}
           {wallData.map((item) =>
-            item.link ? (
+            item.link && getPoints(item.id, item.link).valid ? (
               <Arrow
                 key={item.id}
-                points={getPoints(item.id, item.link)}
+                points={getPoints(item.id, item.link).points}
                 fill="#344e41"
                 stroke={"#344e41"}
               />
