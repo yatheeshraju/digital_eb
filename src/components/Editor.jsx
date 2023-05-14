@@ -6,8 +6,8 @@ import { toast } from "react-hot-toast";
 import EditCard from "./EditCard";
 import {
   AiFillCheckCircle,
-  AiFillPlusCircle,
   AiFillPlusSquare,
+  AiOutlineGithub,
 } from "react-icons/ai";
 import {
   MdKeyboardDoubleArrowLeft,
@@ -115,7 +115,7 @@ function Editor({ settestwall, testwall, setshowSideBar, showSideBar }) {
         />
       ) : null}
 
-      <div className="w-full flex h-[800px] flex-col overflow-auto">
+      <div className="w-full flex h-[750px] flex-col overflow-auto ">
         {showSideBar &&
           testwall.map((item) => (
             <Card
@@ -136,6 +136,19 @@ function Editor({ settestwall, testwall, setshowSideBar, showSideBar }) {
           </span>
           <span>{showSideBar && "Create"}</span>
         </button>
+      </div>
+      <div className="flex flex-col justify-center items-center mr-2">
+        <a
+          href="https://github.com/yatheeshraju/digital_eb"
+          target="_blank"
+          rel="noreferrer"
+          className="mb-2 mt-2 flex  text-center justify-center items-center text-xl font-bold text-green-900"
+        >
+          <span>
+            <AiOutlineGithub size={38} />
+          </span>
+          <span>{showSideBar && "yatheeshraju"}</span>
+        </a>
       </div>
       <div className="flex flex-row justify-end  items-center mb-2 mr-2">
         <button onClick={() => setshowSideBar(!showSideBar)}>

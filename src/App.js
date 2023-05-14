@@ -48,7 +48,6 @@ function App() {
           />
         </div>
       </div>
-
       <div className="viewer">
         <Viewer
           size={{
