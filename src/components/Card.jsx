@@ -3,9 +3,9 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 
 function Card({ info, handleDelete, handleEditOpen }) {
   return (
-    <div className="w-full p-4 flex justify-between bg-white shadow-lg border mt-3 ">
+    <div className="w-72 p-4 flex  flex-row justify-between bg-white shadow-lg border mt-3 ">
       <div>{info.name}</div>
-      <div className="flex flex-row w-16 justify-between">
+      <div className="flex flex-row w-12 justify-between">
         <button onClick={() => handleEditOpen(info.id)}>
           <AiOutlineEdit color="gray" size={18} />
         </button>

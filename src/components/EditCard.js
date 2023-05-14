@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
 
-export default function Modal({ handleSave, handleEditClose, testwall, id }) {
+export default function EditCard({
+  handleSave,
+  handleEditClose,
+  testwall,
+  id,
+}) {
   const [cardDetails, setcardDetails] = useState({});
   const getCardDetails = (testwall, id) => {
     return testwall.find((item) => item.id === id);

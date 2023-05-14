@@ -3,15 +3,21 @@ import { useState, useEffect } from "react";
 import { set, getAll, del } from "../utils/idb_utils";
 import Card from "./Card";
 import { toast } from "react-hot-toast";
-import Modal from "./Modal";
-import { AiFillCheckCircle } from "react-icons/ai";
+import EditCard from "./EditCard";
+import {
+  AiFillCheckCircle,
+  AiFillPlusCircle,
+  AiOutlinePlus,
+} from "react-icons/ai";
+import CreateCard from "./CreateCard";
 
 function Editor({ settestwall, testwall }) {
   const [cardDetails, setcardDetails] = useState({});
-  const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [editId, setEditId] = useState();
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-  const handleAddCard = async () => {
+  const handleAddCard = async (cardDetails) => {
     if (
       cardDetails.name !== "" ||
       cardDetails.name !== undefined ||
@@ -26,6 +32,7 @@ function Editor({ settestwall, testwall }) {
         isDragging: false,
       });
     }
+    handleCreateClose();
     reloadData();
   };
 
@@ -52,11 +59,6 @@ function Editor({ settestwall, testwall }) {
   const reloadData = async () => {
     await getAll().then((res) => settestwall(res));
   };
-  const handleInput = (e) => {
-    let value = e.target.value;
-    let keyname = e.target.name;
-    setcardDetails({ ...cardDetails, [keyname]: value });
-  };
   useEffect(() => {
     getAll().then((res) => settestwall(res));
   }, [settestwall]);
@@ -73,79 +75,48 @@ function Editor({ settestwall, testwall }) {
   };
 
   const handleEditOpen = (id) => {
-    setShowModal(true);
+    setShowEdit(true);
     setEditId(id);
   };
 
   const handleEditClose = (id) => {
-    setShowModal(false);
+    setShowEdit(false);
   };
+
+  const handleCreateOpen = (id) => {
+    setShowCreate(true);
+  };
+
+  const handleCreateClose = (id) => {
+    setShowCreate(false);
+  };
+
   return (
     <>
-      {showModal ? (
-        <Modal
+      {showEdit ? (
+        <EditCard
           testwall={testwall}
           id={editId}
           handleEditClose={handleEditClose}
           handleSave={handleSave}
         />
       ) : null}
-      <label
-        className="font-normal text-gray-700 dark:text-white"
-        htmlFor="name"
-      >
-        Name
-      </label>
-      <input
-        className="mb-2 appearance-none border border-black-300 w-full py-2 px-4 bg-white text-black-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-transparent"
-        type="text"
-        name="name"
-        id="name"
-        onChange={handleInput}
-      />
-
-      <label
-        className="font-normal text-gray-700 dark:text-white"
-        htmlFor="data"
-      >
-        Data
-      </label>
-      <textarea
-        className="mb-2 appearance-none border border-black-300 w-full py-2 px-4 bg-white text-black-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-transparent"
-        type="text"
-        name="data"
-        id="data"
-        rows={5}
-        onChange={handleInput}
-      />
-      <label
-        className="font-normal text-gray-700 dark:text-white"
-        htmlFor="link"
-      >
-        Link Card
-      </label>
-      <select
-        className="mb-4 px-4 py-2  text-gray-500 border-green-300 focus:ring-green-500 bo focus:border-green-500 pr-7 "
-        onChange={handleInput}
-        id="link"
-        name="link"
-      >
-        <option disabled>please select a card to link</option>
-        {testwall.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-
-      <button
-        type="button"
-        className="py-2 px-4  mb-4 bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 "
-        onClick={handleAddCard}
-      >
-        Add Card
-      </button>
-      <div className="w-full flex flex-col h-96 overflow-auto">
+      {showCreate ? (
+        <CreateCard
+          handleCreateClose={handleCreateClose}
+          handleAddCard={handleAddCard}
+          testwall={testwall}
+        />
+      ) : null}
+      <div className="flex justify-center">
+        <button
+          className="p-1 w-12 h-12 flex justify-center items-center  bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-full"
+          onClick={handleCreateOpen}
+        >
+          <AiFillPlusCircle fill="white" fontSize={38} />
+        </button>
+      </div>
+      <div className="w-full flex h-[800px] flex-col overflow-auto">
         {testwall.map((item) => (
           <Card
             key={item.id}
