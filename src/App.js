@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import Viewer from "./Viewer";
-import Editor from "./Editor";
+import Viewer from "./components/Viewer";
+import Editor from "./components/Editor";
 import { Toaster } from "react-hot-toast";
 
 function App() {

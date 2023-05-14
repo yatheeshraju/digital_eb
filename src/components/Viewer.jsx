@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Stage, Layer, Text, Rect, Group, Arrow } from "react-konva";
-import { set } from "./idb_utils";
+import { set } from "../utils/idb_utils";
 
 function Viewer({ data, size }) {
   const [wallData, setwallData] = useState([]);

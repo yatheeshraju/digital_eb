@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { set, getAll, del } from "./idb_utils";
+import { set, getAll, del } from "../utils/idb_utils";
 import Card from "./Card";
 import { toast } from "react-hot-toast";
 import Modal from "./Modal";
