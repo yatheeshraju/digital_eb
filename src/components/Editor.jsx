@@ -4,10 +4,18 @@ import { set, getAll, del } from "../utils/idb_utils";
 import Card from "./Card";
 import { toast } from "react-hot-toast";
 import EditCard from "./EditCard";
-import { AiFillCheckCircle, AiFillPlusCircle } from "react-icons/ai";
+import {
+  AiFillCheckCircle,
+  AiFillPlusCircle,
+  AiFillPlusSquare,
+} from "react-icons/ai";
+import {
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+} from "react-icons/md";
 import CreateCard from "./CreateCard";
 
-function Editor({ settestwall, testwall }) {
+function Editor({ settestwall, testwall, setshowSideBar, showSideBar }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [editId, setEditId] = useState();
@@ -106,23 +114,37 @@ function Editor({ settestwall, testwall }) {
           testwall={testwall}
         />
       ) : null}
-      <div className="flex justify-center">
+
+      <div className="w-full flex h-[800px] flex-col overflow-auto">
+        {showSideBar &&
+          testwall.map((item) => (
+            <Card
+              key={item.id}
+              info={item}
+              handleDelete={handleDelete}
+              handleEditOpen={handleEditOpen}
+            />
+          ))}
+      </div>
+      <div className="flex flex-col justify-center">
         <button
-          className="p-1 w-12 h-12 flex justify-center items-center  bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-full"
+          className="p-2 flex justify-center items-center w-full bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 "
           onClick={handleCreateOpen}
         >
-          <AiFillPlusCircle fill="white" fontSize={38} />
+          <span>
+            <AiFillPlusSquare fill="white" fontSize={38} />
+          </span>
+          <span>{showSideBar && "Create"}</span>
         </button>
       </div>
-      <div className="w-full flex h-[800px] flex-col overflow-auto">
-        {testwall.map((item) => (
-          <Card
-            key={item.id}
-            info={item}
-            handleDelete={handleDelete}
-            handleEditOpen={handleEditOpen}
-          />
-        ))}
+      <div className="flex flex-row justify-end  items-center mb-2 mr-2">
+        <button onClick={() => setshowSideBar(!showSideBar)}>
+          {showSideBar ? (
+            <MdKeyboardDoubleArrowLeft size={38} />
+          ) : (
+            <MdKeyboardDoubleArrowRight size={38} />
+          )}
+        </button>
       </div>
     </>
   );
