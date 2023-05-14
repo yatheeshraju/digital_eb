@@ -123,12 +123,14 @@ function Viewer({ data, size }) {
                 shadowBlur={20}
                 shadowColor="#344e41"
               ></Rect>
-              <CardImage
-                imgurl={b64toBlob(
-                  item.image.split(",")[1],
-                  item.image.split(",")[0].split(":")[1].split(";")[0]
-                )}
-              />
+              {item.image && (
+                <CardImage
+                  imgurl={b64toBlob(
+                    item.image.split(",")[1],
+                    item.image.split(",")[0].split(":")[1].split(";")[0]
+                  )}
+                />
+              )}
 
               <Group>
                 <Rect
