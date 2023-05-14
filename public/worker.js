@@ -1,5 +1,5 @@
 var CACHE_NAME = "digital_eb";
-var urlsToCache = ["/", "/completed"];
+var urlsToCache = ["/", "/manifest.json", "/worker.js", "/index.html"];
 
 // Install a service worker
 self.addEventListener("install", (event) => {
